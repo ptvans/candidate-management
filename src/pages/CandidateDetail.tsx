@@ -1,14 +1,19 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { Home, Users, Briefcase, HelpCircle, Play, Pause, Volume2, Maximize2, Plus, Minus } from 'lucide-react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { Home, Users, Briefcase, HelpCircle, Play, Pause, Volume2, Maximize2, Plus, Minus, ChevronLeft } from 'lucide-react';
 import './CandidateDetail.css';
 
 const CandidateDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const [isPlaying, setIsPlaying] = useState(false);
   const [activeTab, setActiveTab] = useState('criteria');
   const [activeInterviewTab, setActiveInterviewTab] = useState(0);
   const [showResumeSummary, setShowResumeSummary] = useState(true);
+
+  const handleBackToCandidateList = () => {
+    navigate('/');
+  };
 
   const candidate = {
     id: parseInt(id || '1'),
@@ -69,7 +74,9 @@ const CandidateDetail: React.FC = () => {
         { name: 'Concrete Technical Details', score: 'positive', timestamp: '02:01', reason: 'Reason reason reason' },
         { name: 'Problem Solving Approach', score: 'positive', timestamp: '03:15', reason: 'Reason reason reason' },
         { name: 'Business Impact', score: 'negative', timestamp: '04:30', reason: 'Reason reason reason' }
-      ]
+      ],
+      strengths: "The candidate demonstrated excellent technical depth when discussing their recent React dashboard project. They provided specific details about implementing real-time data visualization using D3.js and WebSocket connections. Their systematic approach to debugging performance issues showed strong problem-solving methodology. They clearly articulated the technical challenges they faced with state management in complex component trees and how they resolved them using Redux Toolkit.",
+      weaknesses: "While the candidate showed good technical knowledge, they struggled to quantify the business impact of their work. They mentioned the dashboard 'improved user experience' but couldn't provide specific metrics like user engagement increases or time savings. The candidate also seemed uncertain about how their technical decisions aligned with broader product strategy and had limited awareness of the project's ROI."
     },
     {
       id: 2,
@@ -79,7 +86,9 @@ const CandidateDetail: React.FC = () => {
         { name: 'Technical Complexity', score: 'positive', timestamp: '05:45', reason: 'Reason reason reason' },
         { name: 'Solution Quality', score: 'positive', timestamp: '07:20', reason: 'Reason reason reason' },
         { name: 'Learning & Growth', score: 'positive', timestamp: '08:15', reason: 'Reason reason reason' }
-      ]
+      ],
+      strengths: "Excellent problem-solving approach when tackling the complex performance optimization challenge. The candidate showed strong analytical thinking by systematically profiling the application, identifying bottlenecks, and implementing targeted solutions. Their use of React.memo, useMemo, and lazy loading demonstrated deep understanding of performance optimization techniques. They also showed good learning agility by researching and implementing Web Workers for heavy computational tasks.",
+      weaknesses: "The candidate took longer than expected to identify the root cause of the performance issues, suggesting they could improve their debugging methodology. They also admitted to not considering the solution's impact on code maintainability initially, which led to technical debt that needed addressing later. Limited experience with performance monitoring tools beyond basic browser dev tools was evident."
     },
     {
       id: 3,
@@ -89,7 +98,9 @@ const CandidateDetail: React.FC = () => {
         { name: 'Communication Skills', score: 'positive', timestamp: '10:30', reason: 'Reason reason reason' },
         { name: 'Team Collaboration', score: 'positive', timestamp: '12:05', reason: 'Reason reason reason' },
         { name: 'Conflict Resolution', score: 'negative', timestamp: '13:45', reason: 'Reason reason reason' }
-      ]
+      ],
+      strengths: "Strong collaboration skills demonstrated through the successful API integration project with backend and design teams. The candidate showed excellent communication by creating technical documentation that non-technical stakeholders could understand. They took initiative in setting up regular sync meetings and used visual tools like Figma to align with designers. Good empathy and understanding of different team perspectives was evident.",
+      weaknesses: "The candidate struggled with conflict resolution when disagreements arose about API design decisions. They admitted to avoiding direct confrontation initially, which led to delayed decision-making. Limited experience in leading cross-functional initiatives was apparent. They also showed some difficulty in translating business requirements into technical specifications without multiple clarification rounds."
     },
     {
       id: 4,
@@ -99,7 +110,9 @@ const CandidateDetail: React.FC = () => {
         { name: 'Framework Knowledge', score: 'positive', timestamp: '15:20', reason: 'Reason reason reason' },
         { name: 'Learning Approach', score: 'positive', timestamp: '16:55', reason: 'Reason reason reason' },
         { name: 'Technology Trends', score: 'positive', timestamp: '18:10', reason: 'Reason reason reason' }
-      ]
+      ],
+      strengths: "Comprehensive knowledge of React ecosystem including hooks, context API, and modern patterns. Good understanding of Next.js for SSR and static generation. The candidate actively follows industry trends through tech blogs, conferences, and contributes to open source projects. Their learning approach is systematic - they mentioned building personal projects to test new technologies before implementing them at work. Strong awareness of performance implications of different framework choices.",
+      weaknesses: "Limited hands-on experience with other major frameworks like Vue or Angular, which could limit adaptability in diverse tech environments. The candidate mentioned being 'sometimes overwhelmed' by the pace of JavaScript ecosystem changes, suggesting they might struggle with rapid technology adoption. They also showed gaps in understanding newer technologies like Server Components and their practical applications in production environments."
     }
   ];
 
@@ -134,7 +147,12 @@ const CandidateDetail: React.FC = () => {
       {/* Main Content */}
       <div className="main-content">
         <div className="content-header">
-          <h1>{candidate.name}</h1>
+          <div className="header-left">
+            <button className="back-button" onClick={handleBackToCandidateList}>
+              <ChevronLeft size={20} />
+            </button>
+            <h1>{candidate.name}</h1>
+          </div>
           <button className="move-next-stage-btn">Move to Next Stage</button>
         </div>
 
@@ -233,34 +251,51 @@ const CandidateDetail: React.FC = () => {
                   </button>
                 </div>
 
-                <div className="criteria-table">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Criteria</th>
-                        <th>Score</th>
-                        <th>Timestamp</th>
-                        <th>Reason</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {q.criteria.map((criterion, index) => (
-                        <tr key={index}>
-                          <td>{criterion.name}</td>
-                          <td>
-                            {criterion.score === 'positive' ? (
-                              <Plus size={16} className="positive" />
-                            ) : (
-                              <Minus size={16} className="negative" />
-                            )}
-                          </td>
-                          <td>{criterion.timestamp}</td>
-                          <td>{criterion.reason}</td>
+                {activeTab === 'criteria' ? (
+                  <div className="criteria-table">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Criteria</th>
+                          <th>Score</th>
+                          <th>Timestamp</th>
+                          <th>Reason</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                      </thead>
+                      <tbody>
+                        {q.criteria.map((criterion, index) => (
+                          <tr key={index}>
+                            <td>{criterion.name}</td>
+                            <td>
+                              {criterion.score === 'positive' ? (
+                                <Plus size={16} className="positive" />
+                              ) : (
+                                <Minus size={16} className="negative" />
+                              )}
+                            </td>
+                            <td>{criterion.timestamp}</td>
+                            <td>{criterion.reason}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : (
+                  <div className="strengths-weaknesses-content">
+                    <div className="strengths-section">
+                      <h4>Strengths</h4>
+                      <div className="strengths-text">
+                        {q.strengths}
+                      </div>
+                    </div>
+                    <div className="weaknesses-section">
+                      <h4>Weaknesses</h4>
+                      <div className="weaknesses-text">
+                        {q.weaknesses}
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             ))}
           </div>
