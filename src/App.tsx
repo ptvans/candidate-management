@@ -10,6 +10,8 @@ function App() {
       <div className="App">
         <Routes>
           <Route path="/" element={<CandidateList />} />
+          <Route path="/candidate-management" element={<CandidateList />} />
+          <Route path="/candidate-management/" element={<CandidateList />} />
           <Route path="/candidate/:id" element={<CandidateDetail />} />
         </Routes>
       </div>
