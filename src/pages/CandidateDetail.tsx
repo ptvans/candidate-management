@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Home, Users, Briefcase, HelpCircle, Play, Pause, Volume2, Maximize2, Plus, Minus } from 'lucide-react';
 import './CandidateDetail.css';
 
@@ -10,7 +10,7 @@ const CandidateDetail: React.FC = () => {
   const [activeInterviewTab, setActiveInterviewTab] = useState(0);
 
   const candidate = {
-    id: 1,
+    id: parseInt(id || '1'),
     name: 'Steve Applebaum',
     title: 'Frontend Software Engineer',
     yoe: '6 years of experience',
@@ -277,8 +277,8 @@ const CandidateDetail: React.FC = () => {
               <p><strong>YOE:</strong> {candidate.yoe}</p>
               <p><strong>Skills:</strong> {candidate.skills}</p>
               <div className="profile-links">
-                <a href="#" className="link">Hide Resume Summary</a>
-                <a href="#" className="link">Open Full Resume</a>
+                <button className="link">Hide Resume Summary</button>
+                <button className="link">Open Full Resume</button>
               </div>
             </div>
           </div>
@@ -332,7 +332,7 @@ const CandidateDetail: React.FC = () => {
               <p><strong>Client:</strong> {candidate.client}</p>
               <p><strong>Location:</strong> {candidate.jobLocation}</p>
               <p><strong>Type:</strong> {candidate.jobType}</p>
-              <a href="#" className="link">View Role</a>
+              <button className="link">View Role</button>
             </div>
           </div>
         </div>
