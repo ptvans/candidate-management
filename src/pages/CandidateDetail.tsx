@@ -8,6 +8,7 @@ const CandidateDetail: React.FC = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [activeTab, setActiveTab] = useState('criteria');
   const [activeInterviewTab, setActiveInterviewTab] = useState(0);
+  const [showResumeSummary, setShowResumeSummary] = useState(true);
 
   const candidate = {
     id: parseInt(id || '1'),
@@ -277,51 +278,57 @@ const CandidateDetail: React.FC = () => {
               <p><strong>YOE:</strong> {candidate.yoe}</p>
               <p><strong>Skills:</strong> {candidate.skills}</p>
               <div className="profile-links">
-                <button className="link">Hide Resume Summary</button>
                 <button className="link">Open Full Resume</button>
+                <button 
+                  className="link" 
+                  onClick={() => setShowResumeSummary(!showResumeSummary)}
+                >
+                  {showResumeSummary ? 'Hide Resume Summary' : 'Show Resume Summary'}
+                </button>
               </div>
             </div>
           </div>
 
-          <div className="skills-section">
-            <h3>Technical Skills</h3>
-            <div className="skills-grid">
-              {technicalSkills.map((skill, index) => (
-                <span key={index} className="skill-tag">{skill}</span>
-              ))}
-            </div>
-            <h4>UI Development</h4>
-            <div className="skills-grid">
-              {uiSkills.map((skill, index) => (
-                <span key={index} className="skill-tag">{skill}</span>
-              ))}
-            </div>
-          </div>
-
-          <div className="experience-section">
-            <h3>Experience</h3>
-            {experience.map((exp, index) => (
-              <div key={index} className="experience-item">
-                <h4>{exp.company}</h4>
-                <p className="exp-title">{exp.title}</p>
-                <p className="exp-location">{exp.location}</p>
-                <p className="exp-period">{exp.period}</p>
+          {showResumeSummary && (
+            <>
+              <div className="skills-section">
+                <h3>Technical Skills</h3>
+                <div className="skills-grid">
+                  {technicalSkills.map((skill, index) => (
+                    <span key={index} className="skill-tag">{skill}</span>
+                  ))}
+                </div>
+                <h4>UI Development</h4>
+                <div className="skills-grid">
+                  {uiSkills.map((skill, index) => (
+                    <span key={index} className="skill-tag">{skill}</span>
+                  ))}
+                </div>
               </div>
-            ))}
-          </div>
 
-          <div className="education-section">
-            <h3>Education</h3>
-            <div className="education-item">
-              <h4>University of Michigan</h4>
-              <p>Bachelor of Arts, Political Science</p>
-              <p>Ann Arbor, MI | April 2010 - June 2015</p>
-            </div>
-          </div>
+              <div className="experience-section">
+                <h3>Experience</h3>
+                {experience.map((exp, index) => (
+                  <div key={index} className="experience-item">
+                    <h4>{exp.company}</h4>
+                    <p className="exp-title">{exp.title}</p>
+                    <p className="exp-location">{exp.location}</p>
+                    <p className="exp-period">{exp.period}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="education-section">
+                <h3>Education</h3>
+                <div className="education-item">
+                  <h4>University of Michigan</h4>
+                  <p>Bachelor of Arts, Political Science</p>
+                  <p>Ann Arbor, MI | April 2010 - June 2015</p>
+                </div>
+              </div>
+            </>
+          )}
         </div>
-
-        {/* Separator */}
-        <div className="sidebar-separator"></div>
 
         {/* Job Container */}
         <div className="job-container">
