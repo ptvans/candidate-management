@@ -1,5 +1,6 @@
 {
   "name": "candidate-management",
+  "homepage": "https://ptvans.github.io/candidate-management",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
