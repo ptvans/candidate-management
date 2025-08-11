@@ -233,31 +233,25 @@ const CandidateDetail: React.FC = () => {
                 <span>Deep product intuition and user-centered thinking</span>
               </div>
             </div>
-          </div>
 
-          {/* Strengths Section */}
-          <div className="strengths-section">
-            <h3>Strengths</h3>
             <div className="strengths-content">
               {activeInterviewTab === 0 ? (
-                "The candidate showed excellent technical depth when discussing their recent projects. Demonstrated strong problem-solving skills and ability to explain complex concepts clearly. Good understanding of modern frontend development practices."
+                "The candidate showed excellent technical depth when discussing their recent projects. Good understanding of modern frontend development practices."
               ) : (
                 "Significant improvement in communication skills compared to first interview. Provided more concrete examples and better articulated technical decisions. Showed strong learning ability and adaptability to new technologies."
               )}
             </div>
-          </div>
 
-          {/* Weaknesses Section */}
-          <div className="weaknesses-section">
-            <h3>Weaknesses</h3>
             <div className="weaknesses-content">
               {activeInterviewTab === 0 ? (
-                "Could provide more specific metrics and business impact from previous projects. Sometimes struggled to connect technical solutions to business outcomes. Limited experience with large-scale distributed systems."
+                "Could provide more specific metrics and business impact from previous projects. Sometimes struggled to connect technical solutions to business outcomes."
               ) : (
                 "Still needs improvement in quantifying the business value of technical decisions. Could benefit from more experience with team leadership and mentoring junior developers. Some gaps in understanding of advanced architectural patterns."
               )}
             </div>
           </div>
+
+        
 
           {/* Interview Questions */}
           <div className="questions-section">
