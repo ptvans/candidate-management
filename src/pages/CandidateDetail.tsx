@@ -191,15 +191,47 @@ const CandidateDetail: React.FC = () => {
             </div>
           </div>
 
-          {/* Summary Section */}
-          <div className="summary-section">
-            <h3>Summary</h3>
-            <div className="summary-content">
-              {activeInterviewTab === 0 ? (
-                "LLM paragraph text about how the candidate performed, paragraph text about how the candidate performed, paragraph text about the candidate, paragraph text about the candidate, paragraph text about the candidate."
-              ) : (
-                "Second interview summary: The candidate demonstrated strong technical skills and improved communication compared to the first round. Showed better problem-solving approach and more detailed examples of past work."
-              )}
+          {/* Overall Recommendation Card */}
+          <div className="overall-recommendation-card">
+            <div className="recommendation-header">Overall Recommendation</div>
+            <div className="recommendation-status">
+              <div className="status-indicator">
+                <div className="status-bars">
+                  <div className="status-bar"></div>
+                  <div className="status-bar"></div>
+                  <div className="status-bar"></div>
+                  <div className="status-bar"></div>
+                </div>
+                <span className="status-text">Strong Yes</span>
+              </div>
+            </div>
+            <div className="role-recommendation">
+              Ready for senior or staff-level frontend role.
+            </div>
+            <div className="recommendation-description">
+              Joe Kim consistently demonstrates senior-level reasoning, product-minded development practices, and deep architectural insight across multiple domains:
+            </div>
+            <div className="domain-checklist">
+              <div className="checklist-item">
+                <span className="checkmark">✓</span>
+                <span>Full-stack leadership</span>
+              </div>
+              <div className="checklist-item">
+                <span className="checkmark">✓</span>
+                <span>MVP & rapid prototyping</span>
+              </div>
+              <div className="checklist-item">
+                <span className="checkmark">✓</span>
+                <span>CI/CD & DevOps collaboration</span>
+              </div>
+              <div className="checklist-item">
+                <span className="checkmark">✓</span>
+                <span>Offline-first + multi-client architecture</span>
+              </div>
+              <div className="checklist-item">
+                <span className="checkmark">✓</span>
+                <span>Deep product intuition and user-centered thinking</span>
+              </div>
             </div>
           </div>
 
@@ -229,6 +261,22 @@ const CandidateDetail: React.FC = () => {
 
           {/* Interview Questions */}
           <div className="questions-section">
+            {/* Criteria Tabs - Moved outside the questions loop */}
+            <div className="criteria-tabs">
+              <button 
+                className={`tab-btn ${activeTab === 'criteria' ? 'active' : ''}`}
+                onClick={() => setActiveTab('criteria')}
+              >
+                Guide Criteria
+              </button>
+              <button 
+                className={`tab-btn ${activeTab === 'strengths' ? 'active' : ''}`}
+                onClick={() => setActiveTab('strengths')}
+              >
+                Strengths & Weaknesses
+              </button>
+            </div>
+
             {interviewQuestions.map((q) => (
               <div key={q.id} className="question-item">
                 <div className="question-header">
@@ -236,21 +284,6 @@ const CandidateDetail: React.FC = () => {
                 </div>
                 <div className="question-summary">{q.summary}</div>
                 
-                <div className="criteria-tabs">
-                  <button 
-                    className={`tab-btn ${activeTab === 'criteria' ? 'active' : ''}`}
-                    onClick={() => setActiveTab('criteria')}
-                  >
-                    Guide Criteria
-                  </button>
-                  <button 
-                    className={`tab-btn ${activeTab === 'strengths' ? 'active' : ''}`}
-                    onClick={() => setActiveTab('strengths')}
-                  >
-                    Strengths & Weaknesses
-                  </button>
-                </div>
-
                 {activeTab === 'criteria' ? (
                   <div className="criteria-table">
                     <table>
