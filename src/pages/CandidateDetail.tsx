@@ -10,9 +10,18 @@ const CandidateDetail: React.FC = () => {
   const [activeTab, setActiveTab] = useState('criteria');
   const [activeInterviewTab, setActiveInterviewTab] = useState(0);
   const [showResumeSummary, setShowResumeSummary] = useState(true);
+  const [expandedQuestions, setExpandedQuestions] = useState<number[]>([]);
 
   const handleBackToCandidateList = () => {
     navigate('/');
+  };
+
+  const toggleQuestionExpansion = (questionId: number) => {
+    setExpandedQuestions(prev => 
+      prev.includes(questionId) 
+        ? prev.filter(id => id !== questionId)
+        : [...prev, questionId]
+    );
   };
 
   const candidate = {
@@ -68,7 +77,9 @@ const CandidateDetail: React.FC = () => {
   const interviewQuestions = [
     {
       id: 1,
+      shortName: "Recent Project & Problem-Solving",
       question: "What have you built recently? What problems did you encounter and how did you solve them? What was the outcome for the company?",
+      response: "The candidate discussed building a React dashboard for real-time data visualization. They encountered performance issues with large datasets and solved them by implementing virtualization and WebSocket connections. The outcome was improved user experience and faster data loading.",
       summary: "20 word LLM summary of candidate answer",
       criteria: [
         { name: 'Concrete Technical Details', score: 'positive', timestamp: '02:01', reason: 'Reason reason reason' },
@@ -80,7 +91,9 @@ const CandidateDetail: React.FC = () => {
     },
     {
       id: 2,
+      shortName: "Performance & Tradeoffs",
       question: "Describe a challenging technical problem you solved. What was your approach and what did you learn from it?",
+      response: "The candidate described solving a performance bottleneck in a React application by implementing code splitting, lazy loading, and optimizing re-renders. They used React DevTools Profiler to identify issues and learned the importance of performance monitoring.",
       summary: "20 word LLM summary of candidate answer for technical problem solving",
       criteria: [
         { name: 'Technical Complexity', score: 'positive', timestamp: '05:45', reason: 'Reason reason reason' },
@@ -92,7 +105,9 @@ const CandidateDetail: React.FC = () => {
     },
     {
       id: 3,
+      shortName: "Cross-Functional Collaboration",
       question: "How do you handle working with cross-functional teams? Can you give an example of a successful collaboration?",
+      response: "The candidate shared an example of collaborating with backend engineers and designers on an API integration project. They emphasized clear communication, regular sync meetings, and creating documentation that non-technical stakeholders could understand.",
       summary: "20 word LLM summary of candidate answer for teamwork and collaboration",
       criteria: [
         { name: 'Communication Skills', score: 'positive', timestamp: '10:30', reason: 'Reason reason reason' },
@@ -104,7 +119,9 @@ const CandidateDetail: React.FC = () => {
     },
     {
       id: 4,
+      shortName: "Frontend Framework Experience",
       question: "What's your experience with modern frontend frameworks? How do you stay updated with the latest technologies?",
+      response: "The candidate has extensive experience with React, including hooks and modern patterns. They stay updated through tech blogs, conferences, open source contributions, and building personal projects to test new technologies.",
       summary: "20 word LLM summary of candidate answer for technical knowledge and learning",
       criteria: [
         { name: 'Framework Knowledge', score: 'positive', timestamp: '15:20', reason: 'Reason reason reason' },
@@ -273,54 +290,85 @@ const CandidateDetail: React.FC = () => {
 
             {interviewQuestions.map((q) => (
               <div key={q.id} className="question-item">
-                <div className="question-header">
-                  <h4>Q{q.id} '{q.question}'</h4>
-                </div>
-                <div className="question-summary">{q.summary}</div>
-                
-                {activeTab === 'criteria' ? (
-                  <div className="criteria-table">
-                    <table>
-                      <thead>
-                        <tr>
-                          <th>Criteria</th>
-                          <th>Score</th>
-                          <th>Timestamp</th>
-                          <th>Reason</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {q.criteria.map((criterion, index) => (
-                          <tr key={index}>
-                            <td>{criterion.name}</td>
-                            <td>
-                              {criterion.score === 'positive' ? (
-                                <Plus size={16} className="positive" />
-                              ) : (
-                                <Minus size={16} className="negative" />
-                              )}
-                            </td>
-                            <td>{criterion.timestamp}</td>
-                            <td>{criterion.reason}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                {/* Question Header - Always Visible */}
+                <div className="question-header-collapsed" onClick={() => toggleQuestionExpansion(q.id)}>
+                  <div className="question-header-left">
+                    <div className="recommendation-indicator">
+                      <div className="status-bars-small">
+                        <div className="status-bar-small"></div>
+                        <div className="status-bar-small"></div>
+                        <div className="status-bar-small"></div>
+                        <div className="status-bar-small"></div>
+                      </div>
+                      <span className="recommendation-text">Yes</span>
+                    </div>
+                    <div className="question-info">
+                      <span className="question-number">Q{q.id}</span>
+                      <span className="question-title">{q.shortName.split('?')[0]}</span>
+                    </div>
                   </div>
-                ) : (
-                  <div className="strengths-weaknesses-content">
-                    <div className="strengths-section">
-                      <h4>Strengths</h4>
-                      <div className="strengths-text">
-                        {q.strengths}
+                  <div className="question-header-right">
+                    <ChevronLeft 
+                      size={20} 
+                      className={`expand-icon ${expandedQuestions.includes(q.id) ? 'expanded' : ''}`}
+                    />
+                  </div>
+                </div>
+
+                {/* Question Content - Expandable */}
+                {expandedQuestions.includes(q.id) && (
+                  <div className="question-content-expanded">
+                    <div className="question-full-text">{q.question}</div>
+                                        
+                    {activeTab === 'criteria' ? (
+                      <div className="guide-criteria-content">
+                        <div className="response-paragraph">{q.response}</div>
+                        <div className="summary-paragraph">{q.summary}</div>
+                        <div className="criteria-table">
+                          <table>
+                            <thead>
+                              <tr>
+                                <th>Criteria</th>
+                                <th>Score</th>
+                                <th>Timestamp</th>
+                                <th>Reason</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {q.criteria.map((criterion, index) => (
+                                <tr key={index}>
+                                  <td>{criterion.name}</td>
+                                  <td>
+                                    {criterion.score === 'positive' ? (
+                                      <Plus size={16} className="positive" />
+                                    ) : (
+                                      <Minus size={16} className="negative" />
+                                    )}
+                                  </td>
+                                  <td>{criterion.timestamp}</td>
+                                  <td>{criterion.reason}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
                       </div>
-                    </div>
-                    <div className="weaknesses-section">
-                      <h4>Weaknesses</h4>
-                      <div className="weaknesses-text">
-                        {q.weaknesses}
+                    ) : (
+                      <div className="strengths-weaknesses-content">
+                        <div className="strengths-section">
+                          <h4>Strengths</h4>
+                          <div className="strengths-text">
+                            {q.strengths}
+                          </div>
+                        </div>
+                        <div className="weaknesses-section">
+                          <h4>Weaknesses</h4>
+                          <div className="weaknesses-text">
+                            {q.weaknesses}
+                          </div>
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 )}
               </div>
