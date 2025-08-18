@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Home, Users, Briefcase, HelpCircle, FileText, Bot, Plus, Search, Filter, MoreVertical, Calendar, User } from 'lucide-react';
+import { Home, Users, Briefcase, HelpCircle, FileText, Plus, Search, MoreVertical, Calendar, User } from 'lucide-react';
 import './GuidesIndex.css';
 
 interface Guide {

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Home, Users, Briefcase, HelpCircle, Mail, Linkedin, X, Check, X as XIcon, Minus } from 'lucide-react';
+import { Home, Users, Briefcase, HelpCircle, Mail, Linkedin, X, Check, X as XIcon, Minus, FileText } from 'lucide-react';
 import './CandidateList.css';
 
 const CandidateList: React.FC = () => {
@@ -152,24 +152,28 @@ const CandidateList: React.FC = () => {
       <div className="sidebar">
         <div className="sidebar-content">
           <div className="nav-item">
-            <Home size={20} />
-            <span>Home</span>
+            <Link to="/" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'inherit', textDecoration: 'none' }}>
+              <Home size={20} />
+            </Link>
           </div>
           <div className="nav-item active">
-            <Users size={20} />
-            <span>Candidates</span>
+            <Link to="/" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'inherit', textDecoration: 'none' }}>
+              <Users size={20} />
+            </Link>
+          </div>
+          <div className="nav-item">
+            <Link to="/guides" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'inherit', textDecoration: 'none' }}>
+              <FileText size={20} />
+            </Link>
           </div>
           <div className="nav-item">
             <Briefcase size={20} />
-            <span>Roles</span>
           </div>
           <div className="nav-item help">
             <HelpCircle size={20} />
-            <span>Help</span>
           </div>
           <div className="user-profile-sidebar">
             <div className="user-avatar">BE</div>
-            <span>Bork Effelblatt</span>
           </div>
         </div>
       </div>
