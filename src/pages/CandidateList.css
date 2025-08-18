@@ -2,84 +2,75 @@
   display: flex;
   height: 100vh;
   background-color: #f5f5f5;
+  overflow: hidden;
 }
 
 /* Sidebar Styles */
 .sidebar {
-  width: 80px;
-  background-color: #2c3e50;
-  color: white;
-  padding: 15px 0;
-  position: fixed;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  z-index: 100;
+  width: 64px;
+  background-color: #ffffff;
+  color: #6c757d;
+  padding: 16px 0;
+  border-right: 1px solid #e9ecef;
+  flex-shrink: 0;
 }
 
 .sidebar-content {
   display: flex;
   flex-direction: column;
   height: 100%;
-  align-items: center;
 }
 
 .nav-item {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  padding: 12px 0px;
+  justify-content: center;
+  padding: 12px 0;
+  color: #6c757d;
   cursor: pointer;
-  transition: background-color 0.2s;
-  gap: 4px;
-  font-size: 10px;
-  text-align: center;
-  width: 100%;
-  margin-bottom: 8px;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  font-weight: 500;
 }
 
 .nav-item:hover {
-  background-color: #34495e;
+  background-color: #f8f9fa;
+  color: #495057;
 }
 
 .nav-item.active {
-  background-color: #3498db;
+  background-color: #e3f2fd;
+  color: #1976d2;
+  border-right: 3px solid #1976d2;
+  border-radius: 8px;
+  margin: 0 8px;
 }
 
 .nav-item.help {
-  margin-bottom: 0;
+  margin-top: auto;
+  margin-bottom: 16px;
 }
 
 .user-profile-sidebar {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 4px;
-  padding: 15px 0px;
+  justify-content: center;
+  padding: 16px 0;
+  border-top: 1px solid #e9ecef;
   margin-top: auto;
-  border-top: 1px solid #34495e;
-  background-color: #34495e;
-  width: 100%;
 }
 
-.user-profile-sidebar .user-avatar {
-  width: 24px;
-  height: 24px;
-  background-color: #3498db;
+.user-avatar {
+  width: 28px;
+  height: 28px;
+  background-color: #1976d2;
   color: white;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 600;
-  font-size: 10px;
-}
-
-.user-profile-sidebar span {
-  color: white;
-  font-size: 10px;
-  font-weight: 500;
-  text-align: center;
+  font-size: 12px;
 }
 
 /* Left Panel Styles */
@@ -89,7 +80,9 @@
   border-right: 1px solid #ecf0f1;
   display: flex;
   flex-direction: column;
+  min-width: 0;
   margin-left: 80px;
+  overflow: hidden;
 }
 
 .list-header {
@@ -135,6 +128,7 @@
 .candidates-table {
   flex: 1;
   overflow-y: auto;
+  min-height: 0;
 }
 
 .candidates-table table {
