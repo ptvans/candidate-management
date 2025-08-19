@@ -35,6 +35,8 @@ const Guides: React.FC = () => {
   const [poorAnswer, setPoorAnswer] = useState<string>('');
   
   const evaluationCriteriaRef = useRef<HTMLTextAreaElement>(null);
+  const goodAnswerRef = useRef<HTMLTextAreaElement>(null);
+  const poorAnswerRef = useRef<HTMLTextAreaElement>(null);
 
   // Auto-resize Evaluation Criteria textarea when content changes
   const evaluationCriteriaContent = documentSections[0]?.content;
@@ -46,6 +48,24 @@ const Guides: React.FC = () => {
       textarea.style.height = textarea.scrollHeight + 'px';
     }
   }, [evaluationCriteriaContent]);
+
+  // Auto-resize Good Answer textarea when content changes
+  useEffect(() => {
+    if (goodAnswerRef.current) {
+      const textarea = goodAnswerRef.current;
+      textarea.style.height = 'auto';
+      textarea.style.height = textarea.scrollHeight + 'px';
+    }
+  }, [goodAnswer]);
+
+  // Auto-resize Poor Answer textarea when content changes
+  useEffect(() => {
+    if (poorAnswerRef.current) {
+      const textarea = poorAnswerRef.current;
+      textarea.style.height = 'auto';
+      textarea.style.height = textarea.scrollHeight + 'px';
+    }
+  }, [poorAnswer]);
 
   const scriptedInteraction: ChatMessage[] = [
     {
@@ -222,19 +242,25 @@ const Guides: React.FC = () => {
           </div>
         </div>
       </div>
+      
+      {/* Main Content Area */}
+      <div className="main-content">
+        {/* Page Header */}
+        <div className="page-header">
+          <div className="page-breadcrumb">
+            Scoring Guides &gt; New Guide
+          </div>
+        </div>
+        
+        {/* Panels Container */}
+        <div className="panels-container">
 
       {/* Left Panel: AI Helper */}
-      <div 
-        className="left-panel"
-        style={{ width: '50%' }}
-      >
+      <div className="left-panel">
         <div className="chat-header">
-          <div className="breadcrumb">
-            <Link to="/guides" style={{ color: '#6c757d', textDecoration: 'none' }}>Scoring Guides</Link> &gt; New Guide
-          </div>
           <div className="ai-helper-title">
             <Bot size={20} />
-            <span>AI Helper</span>
+            <span>HireSignal Agent</span>
           </div>
         </div>
 
@@ -301,18 +327,14 @@ const Guides: React.FC = () => {
       </div>
 
       {/* Right Panel: Document Editor */}
-      <div 
-        className="right-panel"
-        style={{ width: '50%' }}
-      >
+      <div className="right-panel">
         <div className="document-header">
-          <h2>{selectedRole || 'New Guide'}</h2>
+          <span>{selectedRole || 'New Guide'}</span>
           <button className="save-button">Save</button>
         </div>
 
         <div className="document-content">
           <div className="sections-outline">
-            <h3>Sections</h3>
             {documentSections.map((section, index) => (
               <div key={section.id} className="section-item">
                 <div className="section-header">
@@ -329,8 +351,12 @@ const Guides: React.FC = () => {
                           <div className="answer-field">
                             <label>Good Example</label>
                             <textarea
+                              ref={goodAnswerRef}
                               value={goodAnswer}
-                              onChange={(e) => setGoodAnswer(e.target.value)}
+                              onChange={(e) => {
+                                setGoodAnswer(e.target.value);
+                                autoResizeTextarea(e);
+                              }}
                               placeholder="Describe what makes a good answer..."
                               className="section-textarea"
                               rows={1}
@@ -339,8 +365,12 @@ const Guides: React.FC = () => {
                           <div className="answer-field">
                             <label>Poor Example</label>
                             <textarea
+                              ref={poorAnswerRef}
                               value={poorAnswer}
-                              onChange={(e) => setPoorAnswer(e.target.value)}
+                              onChange={(e) => {
+                                setPoorAnswer(e.target.value);
+                                autoResizeTextarea(e);
+                              }}
                               placeholder="Describe what makes a poor answer..."
                               className="section-textarea"
                               rows={1}
@@ -366,6 +396,8 @@ const Guides: React.FC = () => {
               </div>
             ))}
           </div>
+        </div>
+      </div>
         </div>
       </div>
     </div>
