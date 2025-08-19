@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Home, Users, Briefcase, HelpCircle, FileText, Bot, User, Send, ChevronRight } from 'lucide-react';
+import { Home, Users, Briefcase, HelpCircle, FileText, Bot, User, Send, ChevronRight, Undo, Redo } from 'lucide-react';
 import './Guides.css';
 
 interface ChatMessage {
@@ -335,7 +335,14 @@ const Guides: React.FC = () => {
       <div className="right-panel">
         <div className="document-header">
           <span>{selectedRole || 'New Guide'}</span>
-          <button className="save-button">Save</button>
+          <div className="document-actions">
+            <button className="action-button" title="Undo">
+              <Undo size={16} />
+            </button>
+            <button className="action-button" title="Redo">
+              <Redo size={16} />
+            </button>
+          </div>
         </div>
 
         <div className="document-content">
