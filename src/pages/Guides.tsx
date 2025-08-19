@@ -238,7 +238,7 @@ const Guides: React.FC = () => {
             <HelpCircle size={20} />
           </div>
           <div className="user-profile-sidebar">
-            <div className="user-avatar">BE</div>
+            <div className="user-avatar">PV</div>
           </div>
         </div>
       </div>

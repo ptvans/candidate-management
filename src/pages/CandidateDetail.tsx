@@ -155,7 +155,7 @@ const CandidateDetail: React.FC = () => {
             <span>Help</span>
           </div>
           <div className="user-profile-sidebar">
-            <div className="user-avatar">BE</div>
+            <div className="user-avatar">PV</div>
             <span>Bork Effelblatt</span>
           </div>
         </div>
