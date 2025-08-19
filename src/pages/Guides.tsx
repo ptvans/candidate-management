@@ -248,7 +248,10 @@ const Guides: React.FC = () => {
         {/* Page Header */}
         <div className="page-header">
           <div className="page-breadcrumb">
-            Scoring Guides &gt; New Guide
+            <Link to="/guides" style={{ color: '#6c757d', textDecoration: 'none' }}>
+              Scoring Guides
+            </Link>
+            &nbsp;&gt;&nbsp;New Guide
           </div>
         </div>
         
@@ -268,9 +271,11 @@ const Guides: React.FC = () => {
           <div className="chat-messages">
             {visibleMessages.map((message) => (
               <div key={message.id} className={`message ${message.type} ${message.isHighlighted ? 'highlighted' : ''}`}>
-                <div className="message-avatar">
-                  {message.type === 'ai' ? <Bot size={16} /> : <User size={16} />}
-                </div>
+                {message.type === 'user' && (
+                  <div className="message-avatar">
+                    <User size={16} />
+                  </div>
+                )}
                 <div className="message-content">
                   {message.type === 'ai' && (
                     <div className="message-text">{message.content}</div>
