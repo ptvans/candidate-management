@@ -74,7 +74,7 @@
 }
 
 /* Left Panel Styles */
-.left-panel {
+.candidate-list-left-panel {
   flex: 2;
   background: white;
   border-right: 1px solid #ecf0f1;
@@ -241,7 +241,7 @@
 }
 
 /* Right Panel Styles */
-.right-panel {
+.candidate-list-right-panel {
   flex: 1;
   background: white;
   overflow-y: auto;
@@ -589,13 +589,13 @@
 }
 
 /* Scrollbar hiding */
-.left-panel,
-.right-panel {
+.candidate-list-left-panel,
+.candidate-list-right-panel {
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
 
-.left-panel::-webkit-scrollbar,
-.right-panel::-webkit-scrollbar {
+.candidate-list-left-panel::-webkit-scrollbar,
+.candidate-list-right-panel::-webkit-scrollbar {
   display: none;
 } 

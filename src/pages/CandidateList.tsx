@@ -179,7 +179,7 @@ const CandidateList: React.FC = () => {
       </div>
 
       {/* Left Panel: Candidate List */}
-      <div className="left-panel">
+      <div className="candidate-list-left-panel">
         <div className="list-header">
           <h1>Candidates 15</h1>
         </div>
@@ -267,7 +267,7 @@ const CandidateList: React.FC = () => {
 
       {/* Right Panel: Candidate Detail */}
       {selectedCandidateData && (
-        <div className="right-panel">
+        <div className="candidate-list-right-panel">
           <div className="detail-header">
             <Link to={`/candidate/${selectedCandidateData.id}`} className="candidate-name-link">
               <h2>{selectedCandidateData.name}</h2>

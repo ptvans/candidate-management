@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Home, Users, Briefcase, HelpCircle, FileText, Bot, User, Send, ChevronRight } from 'lucide-react';
 import './Guides.css';
@@ -23,13 +23,27 @@ interface DocumentSection {
 const Guides: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [selectedRole, setSelectedRole] = useState<string>('');
-  const [evaluationCriteria, setEvaluationCriteria] = useState<string[]>([]);
   
   const [documentSections, setDocumentSections] = useState<DocumentSection[]>([
     { id: '1', title: 'Evaluation Criteria', content: '', isExpanded: true },
     { id: '2', title: 'Interview Questions', content: '', isExpanded: true },
     { id: '3', title: 'Red Flags', content: '', isExpanded: true }
   ]);
+
+  const [interviewQuestion, setInterviewQuestion] = useState<string>('');
+  const [goodAnswer, setGoodAnswer] = useState<string>('');
+  const [poorAnswer, setPoorAnswer] = useState<string>('');
+  
+  const evaluationCriteriaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Auto-resize Evaluation Criteria textarea when content changes
+  useEffect(() => {
+    if (evaluationCriteriaRef.current) {
+      const textarea = evaluationCriteriaRef.current;
+      textarea.style.height = 'auto';
+      textarea.style.height = textarea.scrollHeight + 'px';
+    }
+  }, [documentSections[0]?.content]);
 
   const scriptedInteraction: ChatMessage[] = [
     {
@@ -73,9 +87,52 @@ const Guides: React.FC = () => {
     },
     {
       id: '7',
-      type: 'ai',
+      type: 'user',
       content: "The evaluation criteria are:\n• Clearly explains the steps taken to resolve a recent technical challenge\n• Provides a concrete example of problem solving during the interview\n• Answers all required interview questions",
-      isQuestion: false
+      userResponse: "The evaluation criteria are:\n• Clearly explains the steps taken to resolve a recent technical challenge\n• Provides a concrete example of problem solving during the interview\n• Answers all required interview questions"
+    },
+    {
+      id: '8',
+      type: 'ai',
+      content: "What's a question that you will ask in this interview?",
+      isQuestion: true,
+      isHighlighted: true
+    },
+    {
+      id: '9',
+      type: 'user',
+      content: "Please provide an example of a technical challenge you overcame."
+    },
+    {
+      id: '10',
+      type: 'ai',
+      content: "Please describe a good answer to that question",
+      isQuestion: true,
+      isHighlighted: true
+    },
+    {
+      id: '11',
+      type: 'user',
+      content: "Provides a logical, step-by-step explanation including specific actions."
+    },
+    {
+      id: '12',
+      type: 'ai',
+      content: "Please describe a poor answer to that question",
+      isQuestion: true,
+      isHighlighted: true
+    },
+    {
+      id: '13',
+      type: 'user',
+      content: "Cannot explain steps taken or provides only vague statements."
+    },
+    {
+      id: '14',
+      type: 'ai',
+      content: "What's another question that you will ask during this interview?",
+      isQuestion: true,
+      isHighlighted: true
     }
   ];
 
@@ -89,7 +146,23 @@ const Guides: React.FC = () => {
       }
       
       if (currentStep === 5) {
-        updateDocumentSection(0, `Role: ${selectedRole}\n\nThis guide is designed for evaluating ${selectedRole} candidates during technical interviews.\n\nEvaluation Criteria:\n• Clearly explains the steps taken to resolve a recent technical challenge\n• Provides a concrete example of problem solving during the interview\n• Answers all required interview questions`);
+        // Update the Evaluation Criteria section with the bullet list only
+        updateDocumentSection(0, `• Clearly explains the steps taken to resolve a recent technical challenge\n• Provides a concrete example of problem solving during the interview\n• Answers all required interview questions`);
+      }
+      
+      if (currentStep === 7) {
+        // Update the Interview Questions section with the question
+        setInterviewQuestion("Please provide an example of a technical challenge you overcame.");
+      }
+      
+      if (currentStep === 9) {
+        // Update the Good Answer field
+        setGoodAnswer("Provides a logical, step-by-step explanation including specific actions.");
+      }
+      
+      if (currentStep === 11) {
+        // Update the Poor Answer field
+        setPoorAnswer("Cannot explain steps taken or provides only vague statements.");
       }
     }
   };
@@ -106,6 +179,12 @@ const Guides: React.FC = () => {
 
   const handleDocumentEdit = (sectionIndex: number, content: string) => {
     updateDocumentSection(sectionIndex, content);
+  };
+
+  const autoResizeTextarea = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const textarea = event.target;
+    textarea.style.height = 'auto';
+    textarea.style.height = textarea.scrollHeight + 'px';
   };
 
   const visibleMessages = scriptedInteraction.slice(0, currentStep + 1);
@@ -165,7 +244,9 @@ const Guides: React.FC = () => {
                   {message.type === 'ai' ? <Bot size={16} /> : <User size={16} />}
                 </div>
                 <div className="message-content">
-                  <div className="message-text">{message.content}</div>
+                  {message.type === 'ai' && (
+                    <div className="message-text">{message.content}</div>
+                  )}
                   
                   {message.isQuestion && message.options && (
                     <div className="message-options">
@@ -181,37 +262,40 @@ const Guides: React.FC = () => {
                     </div>
                   )}
                   
-                  {message.type === 'user' && message.userResponse && (
-                    <div className="user-response">
-                      {message.userResponse}
+                  {message.type === 'user' && (
+                    <div className={message.id === '3' ? 'user-response' : 'message-text'}>
+                      {message.content}
                     </div>
                   )}
                 </div>
               </div>
             ))}
           </div>
-
-          <div className="chat-input">
-            <input 
-              type="text" 
-              placeholder="Ask AI..." 
-              className="chat-input-field"
-            />
-            <button className="send-button">
-              <Send size={16} />
-            </button>
-          </div>
-
-          <div className="next-button-container">
-            <button 
-              className="next-button"
-              onClick={handleNextStep}
-              disabled={currentStep >= scriptedInteraction.length - 1}
-            >
-              Next <ChevronRight size={16} />
-            </button>
-          </div>
         </div>
+        <div className="chat-footer">
+            <div className="chat-input">
+                <input 
+                type="text" 
+                placeholder="Ask AI..." 
+                className="chat-input-field"
+                />
+                <button className="send-button">
+                <Send size={16} />
+                </button>
+            </div>
+
+            <div className="next-button-container">
+                <button 
+                className="next-button"
+                onClick={handleNextStep}
+                disabled={currentStep >= scriptedInteraction.length - 1}
+                >
+                Next (Simulated)<ChevronRight size={16} />
+                </button>
+            </div>
+        </div>
+        
+
       </div>
 
       {/* Right Panel: Document Editor */}
@@ -220,7 +304,7 @@ const Guides: React.FC = () => {
         style={{ width: '50%' }}
       >
         <div className="document-header">
-          <h2>New Guide</h2>
+          <h2>{selectedRole || 'New Guide'}</h2>
           <button className="save-button">Save</button>
         </div>
 
@@ -233,12 +317,49 @@ const Guides: React.FC = () => {
                   <h4>{section.title}</h4>
                 </div>
                 <div className="section-content">
-                  <textarea
-                    value={section.content}
-                    onChange={(e) => handleDocumentEdit(index, e.target.value)}
-                    placeholder={`Enter content for ${section.title.toLowerCase()}...`}
-                    className="section-textarea"
-                  />
+                  {section.id === '2' ? (
+                    currentStep >= 7 ? (
+                      <div className="interview-questions-content">
+                        <div className="question-heading">
+                          <h4>{interviewQuestion || 'Interview Question'}</h4>
+                        </div>
+                        <div className="answer-fields">
+                          <div className="answer-field">
+                            <label>Good Example</label>
+                            <textarea
+                              value={goodAnswer}
+                              onChange={(e) => setGoodAnswer(e.target.value)}
+                              placeholder="Describe what makes a good answer..."
+                              className="section-textarea"
+                              rows={1}
+                            />
+                          </div>
+                          <div className="answer-field">
+                            <label>Poor Example</label>
+                            <textarea
+                              value={poorAnswer}
+                              onChange={(e) => setPoorAnswer(e.target.value)}
+                              placeholder="Describe what makes a poor answer..."
+                              className="section-textarea"
+                              rows={1}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    ) : null
+                  ) : (
+                    <textarea
+                      ref={section.id === '1' ? evaluationCriteriaRef : null}
+                      value={section.content}
+                      onChange={(e) => {
+                        handleDocumentEdit(index, e.target.value);
+                        autoResizeTextarea(e);
+                      }}
+                      placeholder={`Enter content for ${section.title.toLowerCase()}...`}
+                      className="section-textarea"
+                      rows={1}
+                    />
+                  )}
                 </div>
               </div>
             ))}
