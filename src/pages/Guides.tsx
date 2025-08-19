@@ -37,13 +37,15 @@ const Guides: React.FC = () => {
   const evaluationCriteriaRef = useRef<HTMLTextAreaElement>(null);
 
   // Auto-resize Evaluation Criteria textarea when content changes
+  const evaluationCriteriaContent = documentSections[0]?.content;
+  
   useEffect(() => {
     if (evaluationCriteriaRef.current) {
       const textarea = evaluationCriteriaRef.current;
       textarea.style.height = 'auto';
       textarea.style.height = textarea.scrollHeight + 'px';
     }
-  }, [documentSections[0]?.content]);
+  }, [evaluationCriteriaContent]);
 
   const scriptedInteraction: ChatMessage[] = [
     {
